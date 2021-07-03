@@ -79,7 +79,7 @@ class ModelBuilder(nn.Module):
         # save for visualization
         return_dict['output']['ctrl_points'] = ctrl_points
         return_dict['output']['rectified_images'] = x
-
+    x = x.float()
     encoder_feats = self.encoder(x)
     encoder_feats = encoder_feats.contiguous()
 
@@ -88,7 +88,8 @@ class ModelBuilder(nn.Module):
       loss_rec = self.rec_crit(rec_pred, rec_targets, rec_lengths)
       return_dict['losses']['loss_rec'] = loss_rec
     else:
-      rec_pred, rec_pred_scores = self.decoder.beam_search(encoder_feats, global_args.beam_width, self.eos)
+      # rec_pred, rec_pred_scores = self.decoder.beam_search(encoder_feats, global_args.beam_width, self.eos)
+      rec_pred, rec_pred_scores = self.decoder.sample([encoder_feats, rec_targets, rec_lengths])
       rec_pred_ = self.decoder([encoder_feats, rec_targets, rec_lengths])
       loss_rec = self.rec_crit(rec_pred_, rec_targets, rec_lengths)
       return_dict['losses']['loss_rec'] = loss_rec

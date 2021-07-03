@@ -26,6 +26,8 @@ from lib.utils import to_numpy
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+import numpy as np
+
 
 from config import get_args
 global_args = get_args(sys.argv[1:])
@@ -130,8 +132,16 @@ class ResizeNormalize(object):
 
   def __call__(self, img):
     img = img.resize(self.size, self.interpolation)
-    img = self.toTensor(img)
+    img = np.asarray(img)/255
+    img = img.astype(np.float32)
+    # print(img.size)
+    # img = self.toTensor(img)
+    img = torch.from_numpy(img)
     img.sub_(0.5).div_(0.5)
+    img = img.transpose(1, 0)
+    img = img.transpose(2, 0)
+    # img = img.to(dtype=torch.float64)
+    # print(type(img))
     return img
 
 
@@ -190,6 +200,9 @@ class AlignCollate(object):
     transform = ResizeNormalize((imgW, imgH))
     images = [transform(image) for image in images]
     b_images = torch.stack(images)
+    b_images = b_images.to(dtype=torch.float64)
+    # b_images = b_images.transpose(3,1)
+    print(b_images.size())
 
     return b_images, b_labels, b_lengths
 
