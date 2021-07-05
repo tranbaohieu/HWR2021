@@ -19,7 +19,7 @@ from torch.utils.data import DataLoader, SubsetRandomSampler
 from config import get_args
 from lib import datasets, evaluation_metrics, models
 from lib.models.model_builder import ModelBuilder
-from lib.datasets.dataset import LmdbDataset, AlignCollate
+from lib.datasets.dataset import LmdbDataset, AlignCollate, AlignCollate_padding
 from lib.datasets.concatdataset import ConcatDataset
 from lib.loss import SequenceCrossEntropyLoss
 from lib.trainers import Trainer
@@ -44,11 +44,11 @@ def get_data(data_dir, voc_type, max_len, num_samples, height, width, batch_size
   if is_train:
     data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=workers,
       shuffle=True, pin_memory=True, drop_last=True,
-      collate_fn=AlignCollate(imgH=height, imgW=width, keep_ratio=keep_ratio))
+      collate_fn=AlignCollate_padding(imgH=height, imgW=width, keep_ratio=keep_ratio))
   else:
     data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=workers,
       shuffle=False, pin_memory=True, drop_last=False,
-      collate_fn=AlignCollate(imgH=height, imgW=width, keep_ratio=keep_ratio))
+      collate_fn=AlignCollate_padding(imgH=height, imgW=width, keep_ratio=keep_ratio))
 
   return dataset, data_loader
 

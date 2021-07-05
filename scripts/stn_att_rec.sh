@@ -1,15 +1,15 @@
 CUDA_VISIBLE_DEVICES=0,1 python main.py \
-  --synthetic_train_data_dir /Users/DinhVu/Desktop/gendata/lmdb_folder/train_ID2/ \
-  --test_data_dir /Users/DinhVu/Desktop/gendata/lmdb_folder/train_ID2/ \
+  --synthetic_train_data_dir /home/hieutb/my_project/HWR2021/data/CUTE80/  \
+  --test_data_dir /home/hieutb/my_project/HWR2021/data/CUTE80/ \
   --batch_size 2 \
   --workers 0 \
   --height 32 \
   --width 600 \
-  --voc_type ALLCASES_SYMBOLS \
+  --voc_type VIETNAMESE \
   --arch ResNet_ASTER \
   --with_lstm \
   --logs_dir logs/baseline_aster \
-  --real_logs_dir /Users/DinhVu/Documents/algorithms/aster.pytorch/data/ \
+  --real_logs_dir /home/hieutb/my_project/HWR2021/data/ \
   --max_len 200 \
   --tps_inputsize 32 64 \
   --tps_outputsize 32 100 \
